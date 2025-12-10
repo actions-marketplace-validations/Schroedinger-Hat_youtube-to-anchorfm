@@ -1,19 +1,19 @@
-# YouTube to Anchor.fm - An automation tool to publish your podcast
+# Y2S = YouTube to Spotify - An automation tool to publish your podcast
 
-![Cover image](https://raw.githubusercontent.com/Schrodinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png 'Cover image')
+![Cover image](https://raw.githubusercontent.com/schroedinger-Hat/youtube-to-anchorfm/main/assets/img/cover.png 'Cover image')
 
-This action will upload an audio file from a given YouTube video automatically to your Anchor.fm account.
+This action will upload an audio file from a given YouTube video automatically to your spotify account.
 
 It is very useful in a scenario where you have a YouTube account and also a podcast at Spotify through Anchor.fm.
 
-In our live show ([Schrodinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
+In our live show ([Schrödinger Hat](https://open.spotify.com/show/7yfkQCV6hrPIqflSqJDB2P)) we had this necessity. So we built it for the open source community.
 
 Every contribution is appreciated, even just a simple feedback.
 
 Table of Contents
 =================
 
-* [YouTube to Anchor.fm - An automation tool to publish your podcast](#youtube-to-anchorfm---an-automation-tool-to-publish-your-podcast)
+* [YouTube to spotify - An automation tool to publish your podcast](#youtube-to-spotify---an-automation-tool-to-publish-your-podcast)
    * [How it works](#how-it-works)
    * [How can I run this as a GitHub action?](#how-can-i-run-this-as-a-github-action)
    * [Environment variables](#environment-variables)
@@ -25,9 +25,9 @@ Table of Contents
       * [Set a publish date for the episode](#set-a-publish-date-for-the-episode)
   * [Multiple shows per repository](#multiple-shows-per-repository)
    * [How can I setup for development and use the script locally?](#how-can-i-setup-for-development-and-use-the-script-locally)
-   * [How to upload a YouTube playlist to Anchor.fm using this script?](#how-to-upload-a-youtube-playlist-to-anchorfm-using-this-script)
-* [Contributors](#contributors)
+   * [How to upload a YouTube playlist to spotify using this script?](#how-to-upload-a-youtube-playlist-to-spotify-using-this-script)
 * [License](#license)
+* [Maintainers](#maintainers)
 
 
 ## How it works
@@ -36,11 +36,11 @@ The action will start every time you push a change on the `episode.json` file. I
 
 The action uses a docker image built over Ubuntu. It takes some time to setup the environment before running the script.
 
-**NOTE**: For the script to run successfully it is necessary for there to be at least one episode manually published on Anchor.fm, as the steps to publish on a brand new Anchor.fm account are different, and the automation will break.
+**NOTE**: For the script to run successfully it is necessary for there to be at least one episode manually published on spotify, as the steps to publish on a brand new spotify account are different, and the automation will break.
 
 ## How can I run this as a GitHub action?
 
-You can use the latest version of this action from the [GitHub Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-anchor-fm).
+You can use the latest version of this action from the [GitHub Actions marketplace](https://github.com/marketplace/actions/upload-episode-from-youtube-to-spotify).
 
 In the repository root directory add a `episode.json` file containing your YouTube video id, e.g.:
 
@@ -53,7 +53,7 @@ In the repository root directory add a `episode.json` file containing your YouTu
 Then create a GitHub action in the `.github/workflows` directory with this yaml:
 
 ```yaml
-name: 'Upload Episode from YouTube To Anchor.Fm'
+name: 'Upload Episode from YouTube To Spotify'
 
 on:
   push:
@@ -66,30 +66,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.4.0
+      - name: Upload Episode from YouTube To Spotify
+        uses: Schroedinger-Hat/youtube-to-spotify@v2.6.0
         env:
-          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL }}
-          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD }}
           SPOTIFY_EMAIL: ${{ secrets.SPOTIFY_EMAIL }}
           SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD }}
           EPISODE_PATH: /github/workspace
 ```
 
-**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for _ANCHOR_EMAIL_ and _ANCHOR_PASSWORD_. This environment variables are mandatory as they specify the sign in account. 
+**NOTE**: you need to [set up the secrets](https://docs.github.com/en/free-pro-team@latest/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) for _SPOTIFY_EMAIL_ and _SPOTIFY_PASSWORD_. This environment variables are mandatory as they specify the sign in account. 
 
-Instead the _SPOTIFY_EMAIL_ and _SPOTIFY_PASSWORD_ are not mandatory but can still be set, if needed, and will be used for the new login form if the env variable _ANCHOR_LOGIN_ is set to false.
-
+**NOTE**: Since [PR#127](https://github.com/Schroedinger-Hat/youtube-to-anchorfm/issues/127) the project remove any reference to Anchor.fm due to the Spotify acquisition of the company (you can read more [here](https://medium.com/anchor/anchor-is-joining-spotify-70356e3ac23f)).
 
 ## Environment variables
 
 ### Login Type
 
-Setting the `ANCHOR_LOGIN` to true makes the script login with the old anchor login type. Instead setting it to false makes the script login with the spotify account. By default the value is true.
+Setting the `SPOTIFY_LOGIN` to true makes the script login with the old spotify login type. Instead setting it to false makes the script login with the spotify account. By default the value is true.
 
 ```yaml
 env:
-  ANCHOR_LOGIN: true
+  SPOTIFY_LOGIN: true
 ```
 
 ### Draft Mode
@@ -164,13 +161,30 @@ env:
 
 ### Set a publish date for the episode
 
-By setting `SET_PUBLISH_DATE`, the new episode can be scheduled for publishing the episode on the date that the YouTube video is uploaded. Please note that the scheduling will work if `SAVE_AS_DRAFT` is not set, because Anchor.fm doesn't store publish date for draft episodes.
-If `SET_PUBLISH_DATE` is not set, then Anchor.fm will choose the current date for publishing.
+By setting `SET_PUBLISH_DATE`, the new episode can be scheduled for publishing the episode on the date that the YouTube video is uploaded. Please note that the scheduling will work if `SAVE_AS_DRAFT` is not set, because spotify doesn't store publish date for draft episodes.
+If `SET_PUBLISH_DATE` is not set, then spotify will choose the current date for publishing.
 
 ```yaml
 env:
   SET_PUBLISH_DATE: true
 ```
+
+### Set user agent
+
+We allow setting the user agent with the environment variable `USER_AGENT`.
+
+You can use a browser of your choice to open `https://httpbin.io/user-agent` and view its user agent, then copy that value to set the
+environment variable `USER_AGENT`.
+
+Motivation: the reason we set user agent is to avoid sites to detect that automation is used, for example,
+Spotify might sometimes show different page for login with the default user agent for headless puppeteer. Although we
+are not sure if this contributes to making spotify show a different page for login, we allow setting the `USER_AGENT`.
+
+The default user agent used when puppeteer is launched in a headless mode looks something like:
+
+`Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/131.0.0.0 Safari/537.36`
+
+If the `USER_AGENT` is not set, the default user agent specified by puppeteer is used.
 
 ## Multiple shows per repository
 
@@ -203,7 +217,7 @@ In `great-news.yaml` and `sad-news.yaml`:
 name: 'Great News Upload Action'
 on:
   push:
-    paths: 
+    paths:
     ## only updates to this file trigger this action
       - great-news.json   # or sad-news.json
 jobs:
@@ -211,11 +225,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Upload Episode from YouTube To Anchor.Fm
-        uses: Schrodinger-Hat/youtube-to-anchorfm@v2.0.0
+      - name: Upload Episode from YouTube To Spotify
+        uses: Schrodinger-Hat/youtube-to-spotify@v2.6.0
         env:
-          ANCHOR_EMAIL: ${{ secrets.ANCHOR_EMAIL_GREATNEWS}}  # OR secrets.ANCHOR_EMAIL_SADNEWS 
-          ANCHOR_PASSWORD: ${{ secrets.ANCHOR_PASSWORD_GREATNEWS }}  # OR secrets.ANCHOR_PASSWORD_SADNEWS
           SPOTIFY_EMAIL: ${{ secrets.SPOTIFY_EMAIL_GREATNEWS }}  # OR secrets.SPOTIFY_EMAIL_SADNEWS
           SPOTIFY_PASSWORD: ${{ secrets.SPOTIFY_PASSWORD_GREATNEWS }}  # OR secrets.SPOTIFY_PASSWORD_SADNEWS
           EPISODE_PATH: /github/workspace/
@@ -237,14 +249,14 @@ the environment variables that you normally specify in the GitHub action YAML fi
 
 To do that, you can copy `.env.sample` into a file with name `.env`.
 
-Make sure to specify the mandatory environment variables for logging in to Anchor.fm,
-`ANCHOR_EMAIL` and `ANCHOR_PASSWORD`.
+Make sure to specify the mandatory environment variables for logging in to spotify,
+`SPOTIFY_EMAIL` and `SPOTIFY_PASSWORD`.
 
-If needed we can set the `SPOTIFY_EMAIL` and `SPOTIFY_PASSWORD` too, so they will be used to login with the new login type after changing `ANCHOR_LOGIN` to false.
+If needed we can set the `SPOTIFY_EMAIL` and `SPOTIFY_PASSWORD` too, so they will be used to login with the new login type after changing `SPOTIFY_LOGIN` to false.
 
 Finally, you can do `npm start` to execute the script.
 
-## How to upload a YouTube playlist to Anchor.fm using this script?
+## How to upload a YouTube playlist to spotify using this script?
 
 ⚠ WARNING: This Potentially violates GitHub's Terms of service ⚠
 
@@ -270,41 +282,37 @@ curl https://scc-youtube.vercel.app/playlist-items/PLoXdlLuaGN8ShASxcE2A4YuSto3A
 
 This must be run on the folder where your episode.json is.
 
-# Contributors
-
-Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center"><a href="https://www.linkedin.com/in/%F0%9F%90%A7gabriele-puliti-b62915a9/"><img src="https://avatars.githubusercontent.com/u/12409541?v=4?s=100" width="100px;" alt="GabrielePuliti"/><br /><sub><b>GabrielePuliti</b></sub></a><br /><a href="#design-Wabri" title="Design">🎨</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=Wabri" title="Code">💻</a> <a href="#maintenance-Wabri" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3AWabri" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="https://www.mikilombardi.com"><img src="https://avatars.githubusercontent.com/u/6616203?v=4?s=100" width="100px;" alt="Miki Lombardi"/><br /><sub><b>Miki Lombardi</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=TheJoin95" title="Code">💻</a> <a href="#maintenance-TheJoin95" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3ATheJoin95" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="habet.dev"><img src="https://avatars.githubusercontent.com/u/82916197?v=4?s=100" width="100px;" alt="Abe Hanoka"/><br /><sub><b>Abe Hanoka</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=abe-101" title="Code">💻</a> <a href="#maintenance-abe-101" title="Maintenance">🚧</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/pulls?q=is%3Apr+reviewed-by%3Aabe-101" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center"><a href="https://github.com/matevskial"><img src="https://avatars.githubusercontent.com/u/44746117?v=4?s=100" width="100px;" alt="matevskial"/><br /><sub><b>matevskial</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=matevskial" title="Code">💻</a> <a href="#maintenance-matevskial" title="Maintenance">🚧</a></td>
-      <td align="center"><a href="https://github.com/Amod02-prog"><img src="https://avatars.githubusercontent.com/u/83520862?v=4?s=100" width="100px;" alt="Amod Deshpande"/><br /><sub><b>Amod Deshpande</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=Amod02-prog" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/zephyrus3"><img src="https://avatars.githubusercontent.com/u/47828820?v=4?s=100" width="100px;" alt="Guilherme Costa"/><br /><sub><b>Guilherme Costa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=zephyrus3" title="Code">💻</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues?q=author%3Azephyrus3" title="Bug reports">🐛</a></td>
-      <td align="center"><a href="https://github.com/weltonrodrigo"><img src="https://avatars.githubusercontent.com/u/1644644?v=4?s=100" width="100px;" alt="Welton Rodrigo Torres Nascimento"/><br /><sub><b>Welton Rodrigo Torres Nascimento</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Documentation">📖</a> <a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=weltonrodrigo" title="Code">💻</a></td>
-    </tr>
-    <tr>
-      <td align="center"><a href="https://github.com/nicpuppa"><img src="https://avatars.githubusercontent.com/u/72783243?v=4?s=100" width="100px;" alt="Nicola Puppa"/><br /><sub><b>Nicola Puppa</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/commits?author=nicpuppa" title="Documentation">📖</a></td>
-      <td align="center"><a href="http://matej.voboril.dev"><img src="https://avatars.githubusercontent.com/u/7128721?v=4?s=100" width="100px;" alt="Matt"/><br /><sub><b>Matt</b></sub></a><br /><a href="https://github.com/Schrodinger-Hat/youtube-to-anchorfm/issues?q=author%3ATobiTenno" title="Bug reports">🐛</a></td>
-    </tr>
-  </tbody>
-  <tfoot>
-    
-  </tfoot>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://allcontributors.org) specification.
-
-# License
+## License
 
 MIT
+
+## Maintainers
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/TheJoin95">
+          <img src="https://github.com/TheJoin95.png" width="100px;" alt="Miki Lombardi"/>
+          <br />
+          <sub>
+            <b>Miki Lombardi</b>
+          </sub>
+        </a>
+        <br />
+        <span>💻 Maintainer</span>
+      </td>
+      <td align="center">
+        <a href="https://github.com/matevskial">
+          <img src="https://github.com/matevskial.png" width="100px;" alt="Aleksandar Matevski"/>
+          <br />
+          <sub>
+            <b>Aleksandar Matevski</b>
+          </sub>
+        </a>
+        <br />
+        <span>💻 Maintainer</span>
+      </td>
+    </tr>
+  </table>
+</div>

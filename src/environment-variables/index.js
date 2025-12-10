@@ -4,9 +4,7 @@ const dotenv = require('dotenv');
 const defaultValues = {
   EPISODE_PATH: '.',
   EPISODE_FILE: 'episode.json',
-  ANCHOR_LOGIN: true,
-  ANCHOR_EMAIL: '',
-  ANCHOR_PASSWORD: '',
+  SPOTIFY_LOGIN: true,
   SPOTIFY_EMAIL: '',
   SPOTIFY_PASSWORD: '',
   UPLOAD_TIMEOUT: 60 * 5 * 1000,
@@ -21,7 +19,9 @@ const defaultValues = {
   AUDIO_FILE_TEMPLATE: 'episode.%(ext)s',
   THUMBNAIL_FILE_FORMAT: 'jpg',
   THUMBNAIL_FILE_TEMPLATE: 'thumbnail.%(ext)s',
-  PUPETEER_HEADLESS: true,
+  PUPPETEER_HEADLESS: true,
+  // NOTE: The user agent should probably be updated regularly, for example when updating puppeteer version
+  USER_AGENT: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
 };
 
 const dotEnvVariables = parseDotEnvVariables();
@@ -65,10 +65,11 @@ function getCompleteEpisodePath() {
 }
 
 module.exports = {
+  EPISODE_ID: getEnvironmentVariable('EPISODE_ID'),
   EPISODE_PATH: getCompleteEpisodePath(),
-  ANCHOR_LOGIN: getBoolean(getEnvironmentVariable('ANCHOR_LOGIN')),
-  ANCHOR_EMAIL: getEnvironmentVariable('ANCHOR_EMAIL'),
-  ANCHOR_PASSWORD: getEnvironmentVariable('ANCHOR_PASSWORD'),
+  SPOTIFY_LOGIN: getBoolean(getEnvironmentVariable('SPOTIFY_LOGIN')),
+  SPOTIFY_EMAIL: getEnvironmentVariable('SPOTIFY_EMAIL'),
+  SPOTIFY_PASSWORD: getEnvironmentVariable('SPOTIFY_PASSWORD'),
   SPOTIFY_EMAIL: getEnvironmentVariable('SPOTIFY_EMAIL'),
   SPOTIFY_PASSWORD: getEnvironmentVariable('SPOTIFY_PASSWORD'),
   UPLOAD_TIMEOUT: getEnvironmentVariable('UPLOAD_TIMEOUT'),
@@ -91,5 +92,6 @@ module.exports = {
     getDotEnvironmentVariable('THUMBNAIL_FILE_TEMPLATE'),
     getDotEnvironmentVariable('THUMBNAIL_FILE_FORMAT')
   ),
-  PUPETEER_HEADLESS: getBoolean(getDotEnvironmentVariable('PUPETEER_HEADLESS')),
+  PUPPETEER_HEADLESS: getBoolean(getDotEnvironmentVariable('PUPPETEER_HEADLESS')),
+  USER_AGENT: getDotEnvironmentVariable('USER_AGENT'),
 };

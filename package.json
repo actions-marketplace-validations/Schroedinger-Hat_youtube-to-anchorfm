@@ -1,25 +1,27 @@
 {
-  "name": "youtube-to-anchorfm",
-  "version": "2.0.0",
-  "description": "Github action and general-purpose tool to publish youtube video as anchorfm episode",
+  "name": "youtube-to-spotify",
+  "version": "2.6.0",
+  "description": "Github action and general-purpose tool to publish youtube video as spotify episode",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "puppeteer": "19.7.5",
-    "youtube-dl-exec": "2.4.0",
-    "dotenv": "16.0.3"
+    "progress-estimator": "0.3.1",
+    "puppeteer": "24.10.0",
+    "youtube-dl-exec": "3.0.20",
+    "dotenv": "16.4.5",
+    "log4js": "6.9.1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Schrodinger-Hat/youtube-to-anchorfm.git"
+    "url": "git://github.com/schroedinger-Hat/youtube-to-anchorfm.git"
   },
   "author": "thejoin",
   "license": "MIT",
   "keywords": [
-    "anchorfm",
+    "spotify",
     "youtube"
   ],
   "devDependencies": {
